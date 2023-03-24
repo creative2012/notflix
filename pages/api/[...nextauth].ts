@@ -20,7 +20,7 @@ export default NextAuth({
                 }
             },
             async authorize(credentials) {
-                if (!credentials?.email || credentials?.password) {
+                if (!credentials?.email || !credentials?.password) {
                     throw new Error('Email and password required');
                 }
 
@@ -30,11 +30,14 @@ export default NextAuth({
                     }
                 });
 
-                if (!user || !user.hasedPassword) {
+                if (!user || !user.hashedPassword) {
                     throw new Error('Email does not exist')
                 }
 
-                const isCorrectPassword = await compare(credentials.password, user.hashedPassword);
+                const isCorrectPassword = await compare(
+                    credentials.password, 
+                    user.hashedPassword
+                    );
                 if (!isCorrectPassword) {
                     throw new Error('Incorrect password')
                 }
