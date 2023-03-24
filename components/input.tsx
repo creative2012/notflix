@@ -9,13 +9,7 @@ interface InputProps {
 
 }
 
-const Input: React.FC<InputProps> = ({
-    id,
-    onChange,
-    value,
-    label,
-    type
-}) => {
+const Input: React.FC<InputProps> = ({id, onChange, value, label, type}) => {
     return (
         <div className="relative">
             <input 
@@ -57,6 +51,7 @@ const Input: React.FC<InputProps> = ({
                     peer-placeholder-shown:translate-y-0
                     peer-focus:scale-75
                     peer-focus:-translate-y-3
+                    hover:cursor-text
                 "
                 htmlFor={id}>
                     {label}
