@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const { email, userName, password } = req.body;
+        const { email, name, password } = req.body;
 
         const existingUser = await prismadb.user.findUnique({
             where: {
@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const user = await prismadb.user.create({
             data: {
                 email,
-                userName,
+                name,
                 hashedPassword,
                 image: '',
                 emailVerified: new Date(),
