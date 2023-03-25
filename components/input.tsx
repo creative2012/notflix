@@ -51,6 +51,7 @@ const Input: React.FC<InputProps> = ({ id, onChange, value, label, type }) => {
                     peer-focus:scale-75
                     peer-focus:-translate-y-3
                     hover:cursor-text
+                    drop-shadow-xl
                 "
         htmlFor={id}
       >
