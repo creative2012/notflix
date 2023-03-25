@@ -5,16 +5,16 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 const Billboard = () => {
   const { data } = useBillboard();
   return (
-    <div className="relative h-[56.25vw]">
+    <div className="relative h-[56.25vw] group">
       <video
-        className="w-full h-[56.25vw] object-cover brightness-[60%]"
+        className="w-full h-[56.25vw] object-cover brightness-[50%] group-hover:brightness-[70%] transition duration-700 "
         autoPlay
         muted
         loop
         poster={data?.thumbnailUrl}
         src={data?.videoUrl}
       ></video>
-      <div className="absolute top-[30%] md:top-[40%] ml-4 md:ml-16">
+      <div className="absolute top-[40%] md:top-[30%] ml-4 md:ml-16">
         <p className="text-white text-1xl md:text-5xl h-full w-[50%] lg:text-6xl font-bold drop-shadow-xl">
           {data?.title}
         </p>
