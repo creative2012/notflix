@@ -35,7 +35,6 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [variant, setVariant] = useState("login");
-  const [noGo, setNoGo] = useState(true);
 
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
@@ -53,9 +52,8 @@ const Auth = () => {
       }).then((error) => {
         if (error?.error === null) {
           router.push("/profiles");
-        } else {
-          handleError(error?.error);
         }
+        handleError(error?.error);
       });
     } catch (error) {
       console.log(error);
@@ -63,32 +61,24 @@ const Auth = () => {
   }, [email, password, router]);
 
   const register = useCallback(async () => {
-    setNoGo(true);
-    await axios
-      .post("api/register", {
+    try {
+      await axios.post("api/register", {
         email,
         name,
         password,
-      })
-      .catch(function (error) {
-        if (error.code === "ERR_BAD_REQUEST") {
-          let msg = error.response.data.error;
-          handleError(msg);
-          setNoGo(false);
-          return {};
-        }
       });
-      if(!noGo){
-        login();
-      }
 
-  }, [email, login, name, noGo, password]);
+      login();
+    } catch (error) {
+      handleError(error);
+    }
+  }, [email, name, password, login]);
 
   const [open, setOpen] = useState(false);
   const [errorMsg, setOErrorMsg] = useState("");
 
   const handleError = (e: any) => {
-    setOErrorMsg(e);
+    setOErrorMsg(e?.response?.data?.error);
     setOpen(true);
   };
 
