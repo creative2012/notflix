@@ -50,10 +50,11 @@ const Auth = () => {
         callbackUrl: "/profiles",
         redirect: false,
       }).then((error) => {
-        if (error?.error === null) {
+        if (error?.ok) {
           router.push("/profiles");
+        } else {
+          handleError(error, 'login');
         }
-        handleError(error?.error);
       });
     } catch (error) {
       console.log(error);
@@ -70,15 +71,24 @@ const Auth = () => {
 
       login();
     } catch (error) {
-      handleError(error);
+      handleError(error, 'signup');
     }
   }, [email, name, password, login]);
 
   const [open, setOpen] = useState(false);
   const [errorMsg, setOErrorMsg] = useState("");
 
-  const handleError = (e: any) => {
-    setOErrorMsg(e?.response?.data?.error);
+  const handleError = (e: any, t: string) => {
+    let error;
+    if(t === 'signup'){
+      error = e.response?.data?.error;
+    }
+    if(t === 'login'){
+      console.log(error)
+      error = e.error;
+    }
+
+    setOErrorMsg(error);
     setOpen(true);
   };
 
