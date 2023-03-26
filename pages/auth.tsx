@@ -6,30 +6,34 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import Image from "next/image";
 import { NextPageContext } from "next";
+import PaulMorris from "@/components/PaulMorris";
+import { useRouter } from "next/router";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 export async function getServerSideProps(context: NextPageContext) {
-    const session = await getSession(context);
-  
-    if (session) {
-      return {
-        redirect: {
-          destination: '/profiles',
-          permanent: false,
-        }
-      }
-    }
-  
+  const session = await getSession(context);
+
+  if (session) {
     return {
-      props: {}
-    }
+      redirect: {
+        destination: "/profiles",
+        permanent: false,
+      },
+    };
   }
 
-const Auth = () => {
+  return {
+    props: {},
+  };
+}
 
+const Auth = () => {
+  const router = useRouter();
   const [name, setname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [variant, setVariant] = useState("login");
 
   const toggleVariant = useCallback(() => {
@@ -44,12 +48,18 @@ const Auth = () => {
         email,
         password,
         callbackUrl: "/profiles",
+        redirect: false,
+      }).then((error) => {
+        if (error?.error === null) {
+          router.push("/profiles");
+        } else {
+        handleError(error?.error);
+        }
       });
-
     } catch (error) {
       console.log(error);
     }
-  }, [email, password]);
+  }, [email, password, router]);
 
   const register = useCallback(async () => {
     try {
@@ -61,15 +71,54 @@ const Auth = () => {
 
       login();
     } catch (error) {
-      console.log(error);
+      let msg = error?.response?.data?.error;
+      handleError(msg);
     }
   }, [email, name, password, login]);
+
+  const [open, setOpen] = useState(false);
+  const [errorMsg, setOErrorMsg] = useState("");
+
+  const handleError = (e: any) => {
+    setOErrorMsg(e);
+    setOpen(true);
+  };
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const action = (
+    <div>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </div>
+  );
 
   return (
     <div className="relative h-full w-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-cener bg-fixed bg-cover">
       <div className="bg-black w-full h-full lg:bg-opacity-50">
         <nav className="px-12 py-5">
-          <Image src="/images/logo.png" width={200} height={100} alt="logo" className="h-12" />
+          <Image
+            src="/images/logo.png"
+            width={200}
+            height={100}
+            alt="logo"
+            className="h-12"
+          />
         </nav>
         <div className="flex justify-center">
           <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
@@ -107,6 +156,13 @@ const Auth = () => {
                 value={password}
               />
             </div>
+            <Snackbar
+              open={open}
+              autoHideDuration={3000}
+              onClose={handleClose}
+              message={errorMsg}
+              action={action}
+            />
             <button
               onClick={variant === "login" ? login : register}
               className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
@@ -129,7 +185,7 @@ const Auth = () => {
             </div> */}
             <p className="text-neutral-500 mt-12">
               {variant === "login"
-                ? "First time using Notflix? "
+                ? "First time using Hoboflix? "
                 : "Already have an account?"}
               <span
                 className="text-white ml-1 hover:underline cursor-pointer"
@@ -141,6 +197,7 @@ const Auth = () => {
           </div>
         </div>
       </div>
+      <PaulMorris />
     </div>
   );
 };

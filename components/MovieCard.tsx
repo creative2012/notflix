@@ -20,7 +20,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
         src={data?.thumbnailUrl}
         alt="Thumbnail"
       />
-      <div className="opacity-0 absolute top-0 tranition duration-200 z-10 invisible sm:visible delay-300 w-full scale-0 group-hover:scale-110 group-hover:-translate-y-[6vw] group-hover:translate-x-[2vw] group-hover:opacity-100">
+      <div className="opacity-0 absolute top-0 tranition duration-200 z-10 invisible sm:visible delay-300 w-full scale-0 group-hover:scale-110 group-hover:-translate-y-[6vw]  group-hover:opacity-100">
         <img
           className="cursor-pointer object-cover transition duration shadow-xl rounded-t-md w-full h-[12vw]"
           src={data?.thumbnailUrl}
@@ -43,8 +43,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
           </div>
 
           <p className="text-green-400 font-semibold mt-4">
-            New <span className="text-white">2003</span>
+            New <span className="text-white">{data?.title}</span>
           </p>
+          <div className="flex flex-row gap-2">
           <div className="flex flex-row mt-4 gap-2 items-center">
             <p className="text-white text-[10px] lg:text-sm">
               {data?.duration}
@@ -52,6 +53,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
           </div>
           <div className="flex flex-row mt-4 gap-2 items-center">
             <p className="text-white text-[10px] lg:text-sm">{data?.genre}</p>
+          </div>
           </div>
         </div>
       </div>
